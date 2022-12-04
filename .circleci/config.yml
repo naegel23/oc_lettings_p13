@@ -27,6 +27,9 @@ jobs:
 # CircleCI will report the results back to your VCS provider.
     docker:
       - image: cimg/python:3.9.2
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     steps:
       - checkout
       - python/install-packages:
@@ -44,13 +47,25 @@ jobs:
     docker-containerization:
       docker:
         - image: oclettingsfr
-          auth:
-            username: $DOCKER_USER
-            password: $DOCKER_PASS
 
         - run:
-            name: create docker image
+            name: Authenticate to registry
+            command: echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USER --password-stdin
+            when: always
+
+
+        - run:
+            name: Build image
             command: docker compose up --build
+            when: always
+        - run:
+            name: Tag image
+            command: docker tag oclettingsfr:latest ${DOCKER_USER}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1}
+            when: always
+        - run:
+            name: Push image
+            command: docker push ${DOCKER_USER}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1}
+            when: always
 
 
 # Invoke jobs via workflows
