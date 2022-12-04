@@ -46,7 +46,10 @@ jobs:
           command: echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USER --password-stdin
           when: always
 
-
+  containerise:
+    machine: true
+    steps:
+      - checkout
       - run:
           name: Build image
           command: docker compose up --build
