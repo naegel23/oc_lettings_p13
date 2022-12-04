@@ -41,28 +41,24 @@ jobs:
           name: Run flake8
           command: flake8
 
-    containerise:
-      machine: true
-      steps:
-        - checkout
-        - run:
-            name: Authenticate to registry
-            command: echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USER --password-stdin
-            when: always
+      - run:
+          name: Authenticate to registry
+          command: echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USER --password-stdin
+          when: always
 
 
-        - run:
-            name: Build image
-            command: docker compose up --build
-            when: always
-        - run:
-            name: Tag image
-            command: docker tag oclettingsfr:latest ${DOCKER_USER}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1}
-            when: always
-        - run:
-            name: Push image
-            command: docker push ${DOCKER_USER}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1}
-            when: always
+      - run:
+          name: Build image
+          command: docker compose up --build
+          when: always
+      - run:
+          name: Tag image
+          command: docker tag oclettingsfr:latest ${DOCKER_USER}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1}
+          when: always
+      - run:
+          name: Push image
+          command: docker push ${DOCKER_USER}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1}
+          when: always
 
 
 # Invoke jobs via workflows
