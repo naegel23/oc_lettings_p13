@@ -53,11 +53,11 @@ jobs:
           when: always
       - run:
           name: Tag image
-          command: docker tag oclettingsfr:latest ${DOCKER_USER}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1}
+          command: docker tag oclettingsfr:latest ${DOCKER_USER}/oclettingsfr:imagepush
           when: always
       - run:
           name: Push image
-          command: docker push ${DOCKER_USER}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1}
+          command: docker push ${DOCKER_USER}/oclettings:myfirstimagepush
           when: always
 
 
