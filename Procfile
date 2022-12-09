@@ -1,1 +1,1 @@
-web: gunicorn lettings_site.wsgi
+web: gunicorn lettings_site.wsgi --log-file -
