@@ -115,6 +115,7 @@ USE_TZ = True
 STATIC_ROOT = "staticfiles"
 STATIC_URL = '/static/'
 django_heroku.settings(locals())
+
 sentry_sdk.init(
     dsn="https://f648d00f1db249439431d053587ff2ce@o1363691.ingest.sentry.io/4504158539808768",
     integrations=[
