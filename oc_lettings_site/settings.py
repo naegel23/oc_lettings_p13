@@ -66,6 +66,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'oc_lettings_site.wsgi.application'
 
+FIXTURE_DIR = [
+    "./fixtures"
+]
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
