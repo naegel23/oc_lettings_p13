@@ -2,26 +2,32 @@ version: 2.1
 
 orbs:
   python: circleci/python@1.5.0
+  docker: circleci/docker@3.1.0
 
 jobs:
   build-and-test:
-    executor: python
+    executor: docker/default
     steps:
       - checkout
-      - setup_remote_docker
+      - python/install-packages:
+          pkg-manager: pip
+      - setup_remote_docker:
+          version: 18.09.7
       - run:
-          name: Copy requirements
-          command: cp requirements.txt /app/requirements.txt
-      - run:
-          name: Build the Docker image
+          name: Build Docker Image
           command: |
-            docker build -t my-image .
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+            docker build -t my-app .
       - run:
-          name: Run the tests
+          name: Run tests
+          command: pytest
+      - run:
+          name: Run flake8
+          command: flake8
+      - run:
+          name: Run the application
           command: |
-            docker run -v "$(pwd):/app" my-image pytest
-            docker run -v "$(pwd):/app" my-image flake8
-
+            docker run -p 8000:8000 my-app
 workflows:
   sample:
     jobs:
