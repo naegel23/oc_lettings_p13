@@ -12,9 +12,18 @@ jobs:
           pkg-manager: pip
 
       - run:
-          name: Build Docker Image
+          name: Start Docker daemon
+          command: |
+            sudo service docker start
+
+      - run:
+          name: Log in to Docker registry
           command: |
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+      - run:
+          name: Build Docker Image
+          command: |
             docker build -t my-app -f ./Dockerfile .
 
       - run:
