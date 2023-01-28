@@ -8,14 +8,11 @@ jobs:
     executor: python/default
     steps:
       - checkout
-      - python/install-packages:
-          pkg-manager: pip
-
       - run:
-          name: Log in to Docker registry
+          name: Install dependencies
           command: |
-            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-
+            pip install -r requirements.txt
+      - setup_remote_docker
       - run:
           name: Build Docker Image
           command: |
@@ -32,6 +29,7 @@ workflows:
   sample:
     jobs:
       - build-and-test
+
 
 
 
